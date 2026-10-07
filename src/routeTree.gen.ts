@@ -10,19 +10,49 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as ForBusinessRouteImport } from './routes/for-business'
+import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated/account'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedBusinessRouteImport } from './routes/_authenticated/business'
 import { Route as DealsIndexRouteImport } from './routes/deals.index'
 import { Route as DealsIdRouteImport } from './routes/deals.$id'
+import { Route as AuthenticatedRedemptionIdRouteImport } from './routes/_authenticated/redemption.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
   getParentRoute: () => rootRouteImport,
+} as any)
+const ForBusinessRoute = ForBusinessRouteImport.update({
+  id: '/for-business',
+  path: '/for-business',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAccountRoute = AuthenticatedAccountRouteImport.update({
+  id: '/account',
+  path: '/account',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedBusinessRoute = AuthenticatedBusinessRouteImport.update({
+  id: '/business',
+  path: '/business',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const DealsIndexRoute = DealsIndexRouteImport.update({
   id: '/deals/',
@@ -34,37 +64,90 @@ const DealsIdRoute = DealsIdRouteImport.update({
   path: '/deals/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRedemptionIdRoute =
+  AuthenticatedRedemptionIdRouteImport.update({
+    id: '/redemption/$id',
+    path: '/redemption/$id',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/for-business': typeof ForBusinessRoute
+  '/account': typeof AuthenticatedAccountRoute
+  '/admin': typeof AuthenticatedAdminRoute
+  '/business': typeof AuthenticatedBusinessRoute
   '/deals/$id': typeof DealsIdRoute
   '/deals/': typeof DealsIndexRoute
+  '/redemption/$id': typeof AuthenticatedRedemptionIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/for-business': typeof ForBusinessRoute
+  '/account': typeof AuthenticatedAccountRoute
+  '/admin': typeof AuthenticatedAdminRoute
+  '/business': typeof AuthenticatedBusinessRoute
   '/deals/$id': typeof DealsIdRoute
   '/deals': typeof DealsIndexRoute
+  '/redemption/$id': typeof AuthenticatedRedemptionIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/for-business': typeof ForBusinessRoute
+  '/_authenticated/account': typeof AuthenticatedAccountRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRoute
+  '/_authenticated/business': typeof AuthenticatedBusinessRoute
   '/deals/$id': typeof DealsIdRoute
   '/deals/': typeof DealsIndexRoute
+  '/_authenticated/redemption/$id': typeof AuthenticatedRedemptionIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/deals/$id' | '/deals/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/for-business'
+    | '/account'
+    | '/admin'
+    | '/business'
+    | '/deals/$id'
+    | '/deals/'
+    | '/redemption/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/deals/$id' | '/deals'
-  id: '__root__' | '/' | '/auth' | '/deals/$id' | '/deals/'
+  to:
+    | '/'
+    | '/auth'
+    | '/for-business'
+    | '/account'
+    | '/admin'
+    | '/business'
+    | '/deals/$id'
+    | '/deals'
+    | '/redemption/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/for-business'
+    | '/_authenticated/account'
+    | '/_authenticated/admin'
+    | '/_authenticated/business'
+    | '/deals/$id'
+    | '/deals/'
+    | '/_authenticated/redemption/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  ForBusinessRoute: typeof ForBusinessRoute
   DealsIdRoute: typeof DealsIdRoute
   DealsIndexRoute: typeof DealsIndexRoute
 }
@@ -78,12 +161,47 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/for-business': {
+      id: '/for-business'
+      path: '/for-business'
+      fullPath: '/for-business'
+      preLoaderRoute: typeof ForBusinessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/account': {
+      id: '/_authenticated/account'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof AuthenticatedAccountRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/business': {
+      id: '/_authenticated/business'
+      path: '/business'
+      fullPath: '/business'
+      preLoaderRoute: typeof AuthenticatedBusinessRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/deals/': {
       id: '/deals/'
@@ -99,12 +217,38 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DealsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/redemption/$id': {
+      id: '/_authenticated/redemption/$id'
+      path: '/redemption/$id'
+      fullPath: '/redemption/$id'
+      preLoaderRoute: typeof AuthenticatedRedemptionIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAccountRoute: typeof AuthenticatedAccountRoute
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
+  AuthenticatedBusinessRoute: typeof AuthenticatedBusinessRoute
+  AuthenticatedRedemptionIdRoute: typeof AuthenticatedRedemptionIdRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAccountRoute: AuthenticatedAccountRoute,
+  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
+  AuthenticatedBusinessRoute: AuthenticatedBusinessRoute,
+  AuthenticatedRedemptionIdRoute: AuthenticatedRedemptionIdRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  ForBusinessRoute: ForBusinessRoute,
   DealsIdRoute: DealsIdRoute,
   DealsIndexRoute: DealsIndexRoute,
 }
