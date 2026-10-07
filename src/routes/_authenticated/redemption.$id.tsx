@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { ksh } from "@/lib/format";
 
 export const Route = createFileRoute("/_authenticated/redemption/$id")({
-  head: () => ({ meta: [{ title: "Your deal code — Duka" }, { name: "description", content: "Show this code to redeem your offer." }] }),
+  head: () => ({ meta: [{ title: "Your deal code — Pata" }, { name: "description", content: "Show this code to redeem your offer." }] }),
   component: RedemptionPage,
 });
 

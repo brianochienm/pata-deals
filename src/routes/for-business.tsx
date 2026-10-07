@@ -4,9 +4,9 @@ import { Button } from "@/components/ui/button";
 export const Route = createFileRoute("/for-business")({
   head: () => ({
     meta: [
-      { title: "List your promotion free — Duka for Business" },
+      { title: "List your promotion free — Pata for Business" },
       { name: "description", content: "Put your offers in front of thousands of Nairobi customers. Free to list, pay only on sales." },
-      { property: "og:title", content: "Grow your sales with Duka" },
+      { property: "og:title", content: "Grow your sales with Pata" },
       { property: "og:description", content: "Free listings. Small commission only on verified redemptions." },
     ],
   }),

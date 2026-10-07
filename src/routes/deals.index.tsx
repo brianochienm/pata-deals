@@ -22,9 +22,9 @@ export const Route = createFileRoute("/deals/")({
   validateSearch: searchSchema,
   head: () => ({
     meta: [
-      { title: "Explore deals in Nairobi — Duka" },
+      { title: "Explore deals in Nairobi — Pata" },
       { name: "description", content: "Search and filter promotions by category, area, price, discount and expiry." },
-      { property: "og:title", content: "Explore deals in Nairobi — Duka" },
+      { property: "og:title", content: "Explore deals in Nairobi — Pata" },
       { property: "og:description", content: "Search every live promotion in Nairobi in one place." },
     ],
   }),
