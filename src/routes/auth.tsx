@@ -14,9 +14,9 @@ export const Route = createFileRoute("/auth")({
   validateSearch: z.object({ redirect: z.string().optional() }),
   head: () => ({
     meta: [
-      { title: "Sign in — Duka" },
-      { name: "description", content: "Sign in or create a Duka account to redeem and save deals." },
-      { property: "og:title", content: "Sign in — Duka" },
+      { title: "Sign in — Pata" },
+      { name: "description", content: "Sign in or create a Pata account to redeem and save deals." },
+      { property: "og:title", content: "Sign in — Pata" },
       { property: "og:description", content: "Sign in to redeem and save Nairobi deals." },
     ],
   }),

@@ -10,9 +10,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Duka — All the best deals. One place." },
+      { title: "Pata — All the best deals. One place." },
       { name: "description", content: "Discover promotions, discounts and exclusive offers from Nairobi businesses — without searching dozens of social pages." },
-      { property: "og:title", content: "Duka — All the best deals. One place." },
+      { property: "og:title", content: "Pata — All the best deals. One place." },
       { property: "og:description", content: "Find, redeem and save on Nairobi's best deals in one place." },
     ],
   }),

@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export const BRAND = "Duka";
+export const BRAND = "Pata";
 
 export function SiteHeader() {
   const { user } = useAuth();
@@ -31,7 +31,7 @@ export function SiteHeader() {
     <header className="sticky top-0 z-40 border-b border-border/50 bg-background/80 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
         <Link to="/" className="flex items-center gap-2">
-          <div className="grid size-8 place-items-center rounded-[10px] pill-cyan text-sm font-bold">D</div>
+          <div className="grid size-8 place-items-center rounded-[10px] pill-cyan text-sm font-bold">P</div>
           <span className="text-base font-semibold tracking-tight">{BRAND}</span>
         </Link>
         <nav className="hidden items-center gap-6 text-sm text-muted-foreground md:flex">

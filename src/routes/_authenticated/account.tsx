@@ -8,7 +8,7 @@ import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/_authenticated/account")({
   validateSearch: z.object({ tab: z.enum(["saved", "redemptions"]).optional() }),
-  head: () => ({ meta: [{ title: "My account — Duka" }, { name: "description", content: "Your saved deals and redemptions." }] }),
+  head: () => ({ meta: [{ title: "My account — Pata" }, { name: "description", content: "Your saved deals and redemptions." }] }),
   component: Account,
 });
 

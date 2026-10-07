@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/admin")({
-  head: () => ({ meta: [{ title: "Admin — Duka" }, { name: "description", content: "Platform administration." }] }),
+  head: () => ({ meta: [{ title: "Admin — Pata" }, { name: "description", content: "Platform administration." }] }),
   component: () => (
     <div className="mx-auto max-w-md px-4 py-12 text-center">
       <h1 className="text-2xl font-semibold">Admin</h1>
