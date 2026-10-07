@@ -44,7 +44,7 @@ export function SiteHeader() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button className="grid size-9 place-items-center rounded-full bg-glass text-sm font-semibold">
-                {(user.email ?? "U")[0].toUpperCase()}
+                {(user.email ?? "U").charAt(0).toUpperCase()}
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-52">

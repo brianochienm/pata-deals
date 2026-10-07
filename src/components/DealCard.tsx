@@ -35,7 +35,7 @@ function SaveButton({ id }: { id: string }) {
   );
 }
 
-function Logo({ name, url, size = "md" }: { name: string; url?: string | null; size?: "md" | "sm" }) {
+function Logo({ name, url, size = "md" }: { name: string; url?: string | null | undefined; size?: "md" | "sm" }) {
   const cls = size === "md" ? "size-8 rounded-[9px] text-xs" : "size-7 rounded-[8px] text-xs";
   if (url) return <img src={url} alt="" className={cn(cls, "shrink-0 object-cover")} />;
   return (

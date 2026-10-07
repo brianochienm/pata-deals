@@ -19,7 +19,7 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-function Section({ title, to, children }: { title: string; to?: string; children: React.ReactNode }) {
+function Section({ title, to, children }: { title: string; to?: "popular" | "ending" | "newest"; children: React.ReactNode }) {
   return (
     <section className="px-4 pb-6">
       <div className="mb-3 flex items-baseline justify-between">
@@ -33,7 +33,7 @@ function Section({ title, to, children }: { title: string; to?: string; children
 
 function Bento({ items }: { items: Promo[] }) {
   if (!items.length) return <p className="glass p-4 text-sm text-muted-foreground">No deals here yet.</p>;
-  const [first, ...rest] = items;
+  const first = items[0]!; const rest = items.slice(1);
   return (
     <div className="grid gap-2 md:grid-cols-2">
       <DealCard p={first} />

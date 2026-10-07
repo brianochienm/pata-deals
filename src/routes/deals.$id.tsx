@@ -80,7 +80,7 @@ function DealPage() {
     setBusy(true);
     const { data, error } = await supabase.rpc("redeem_promotion", { _promotion_id: id });
     setBusy(false);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     qc.invalidateQueries({ queryKey: ["redeemed", id] });
     if (p.redemption_method === "online" && p.online_url) window.open(p.online_url, "_blank", "noopener");
     nav({ to: "/redemption/$id", params: { id: (data as any).id } });
@@ -192,7 +192,7 @@ function ReviewForm({ businessId, promotionId }: { businessId: string; promotion
       user_id: user!.id, business_id: businessId, promotion_id: promotionId, rating,
       comment: comment.trim().slice(0, 1000) || null, author_name: prof?.full_name ?? null,
     });
-    if (error) return toast.error(error.code === "23505" ? "You already reviewed this deal" : error.message);
+    if (error) { toast.error(error.code === "23505" ? "You already reviewed this deal" : error.message); return; }
     toast.success("Thanks for your review!");
     setComment("");
     qc.invalidateQueries({ queryKey: ["reviews"] });
