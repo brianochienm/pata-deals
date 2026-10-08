@@ -77,7 +77,7 @@ function Onboarding() {
   const qc = useQueryClient();
   const { data: cats } = useQuery(categoriesQuery);
   const { data: locs } = useQuery(locationsQuery);
-  const [f, setF] = useState<Record<string, string>>({ email: user?.email ?? "" });
+  const [f, setF] = useState<any>({ email: user?.email ?? "" });
   const [logo, setLogo] = useState<File | null>(null);
   const [busy, setBusy] = useState(false);
   const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => setF({ ...f, [k]: e.target.value });
@@ -282,7 +282,7 @@ function PromoForm({ business }: { business: any }) {
   const qc = useQueryClient();
   const { data: locs } = useQuery(locationsQuery);
   const today = new Date().toISOString().slice(0, 10);
-  const [f, setF] = useState<Record<string, string>>({ redemption_method: "qr", starts_at: today, location_id: business.location_id ?? "" });
+  const [f, setF] = useState<any>({ redemption_method: "qr", starts_at: today, location_id: business.location_id ?? "" });
   const [img, setImg] = useState<File | null>(null);
   const [busy, setBusy] = useState(false);
   const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => setF({ ...f, [k]: e.target.value });
