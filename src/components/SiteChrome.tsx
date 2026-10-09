@@ -37,6 +37,7 @@ export function SiteHeader() {
         </Link>
         <nav className="hidden items-center gap-6 text-sm text-muted-foreground md:flex">
           <Link to="/deals" activeProps={{ className: "text-foreground" }}>Explore deals</Link>
+          <Link to="/finder" activeProps={{ className: "text-foreground" }}>AI Finder</Link>
           <Link to="/for-business" activeProps={{ className: "text-foreground" }}>For businesses</Link>
           {isBusiness && <Link to="/business" activeProps={{ className: "text-foreground" }}>Dashboard</Link>}
           {isAdmin && <Link to="/admin" activeProps={{ className: "text-foreground" }}>Admin</Link>}
