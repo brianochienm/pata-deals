@@ -80,11 +80,22 @@ export function BottomNav() {
   );
 }
 
+export const SUPPORT_EMAIL = "brianochiengodhiambo18@gmail.com";
+export const SUPPORT_PHONE = "+254 114 917 724";
+
 export function SiteFooter() {
   return (
     <footer className="mx-auto max-w-6xl px-4 pb-24 pt-8 text-center text-xs text-muted-foreground md:pb-10">
-      © {new Date().getFullYear()} {BRAND} · Nairobi, Kenya ·{" "}
-      <Link to="/for-business" className="text-primary">List Your Promotion — Free</Link>
+      <p>
+        © {new Date().getFullYear()} {BRAND} · Nairobi, Kenya ·{" "}
+        <Link to="/for-business" className="text-primary">List Your Promotion — Free</Link>
+      </p>
+      <p className="mt-2">
+        Support &amp; inquiries:{" "}
+        <a href={`mailto:${SUPPORT_EMAIL}`} className="text-primary">{SUPPORT_EMAIL}</a>
+        {" · "}
+        <a href={`tel:${SUPPORT_PHONE.replace(/\s/g, "")}`} className="text-primary">{SUPPORT_PHONE}</a>
+      </p>
     </footer>
   );
 }
