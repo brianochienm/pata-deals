@@ -9,6 +9,7 @@ import { endsIn, ksh, methodLabel } from "@/lib/format";
 import { promoImage } from "@/lib/images";
 import { useAuth, useFavourites } from "@/hooks/use-auth";
 import { Logo } from "@/components/DealCard";
+import { FollowButton } from "@/components/Notify";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
@@ -99,6 +100,7 @@ function DealPage() {
               <p className="truncate text-sm font-semibold">{p.businesses?.name}</p>
               <p className="text-xs text-muted-foreground">{p.categories?.icon} {p.categories?.name}{avg ? ` · ★ ${avg.toFixed(1)} (${reviews!.length})` : ""}</p>
             </div>
+            <FollowButton businessId={p.business_id} name={p.businesses?.name} />
           </div>
           {p.businesses?.description && <p className="mt-3 text-sm text-muted-foreground">{p.businesses.description}</p>}
           <div className="mt-2 flex flex-wrap gap-3 text-xs text-muted-foreground">

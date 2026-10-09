@@ -4,6 +4,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth, useRoles } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
+import { NotificationBell } from "@/components/Notify";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -40,6 +41,7 @@ export function SiteHeader() {
           {isBusiness && <Link to="/business" activeProps={{ className: "text-foreground" }}>Dashboard</Link>}
           {isAdmin && <Link to="/admin" activeProps={{ className: "text-foreground" }}>Admin</Link>}
         </nav>
+        {user && <NotificationBell />}
         {user ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
