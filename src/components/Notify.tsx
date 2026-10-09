@@ -50,7 +50,7 @@ export function NotificationBell() {
   );
 }
 
-export function FollowButton({ businessId, name }: { businessId: string; name?: string }) {
+export function FollowButton({ businessId, name }: { businessId: string; name?: string | undefined }) {
   const { user } = useAuth();
   const qc = useQueryClient();
   const { data: following } = useQuery({
@@ -64,7 +64,7 @@ export function FollowButton({ businessId, name }: { businessId: string; name?: 
     const { error } = following
       ? await supabase.from("business_follows").delete().eq("user_id", user.id).eq("business_id", businessId)
       : await supabase.from("business_follows").insert({ user_id: user.id, business_id: businessId });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success(following ? "Unfollowed" : `You'll be notified when ${name ?? "they"} post new deals`);
     qc.invalidateQueries({ queryKey: ["follow", user.id, businessId] });
   };
