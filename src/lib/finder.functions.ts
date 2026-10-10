@@ -7,12 +7,22 @@ export type FinderResult = { summary: string; matches: FinderMatch[]; error?: st
 export const findDeals = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => z.object({ query: z.string().trim().min(3).max(500) }).parse(d))
   .handler(async ({ data }): Promise<FinderResult> => {
-    const apiKey = process.env.LOVABLE_API_KEY;
+    const apiKey = process.env["LOVABLE_API_KEY"];
     if (!apiKey) return { summary: "", matches: [], error: "The deal finder isn't configured yet." };
 
     const { createClient } = await import("@supabase/supabase-js");
-    const sb = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY, {
+    const sbKey = process.env["SUPABASE_PUBLISHABLE_KEY"] ?? import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"];
+    const sbUrl = process.env["SUPABASE_URL"] ?? import.meta.env["VITE_SUPABASE_URL"];
+    const sb = createClient(sbUrl, sbKey, {
       auth: { persistSession: false, autoRefreshToken: false },
+      global: {
+        fetch: (input, init) => {
+          const h = new Headers(init?.headers);
+          if (sbKey.startsWith("sb_") && h.get("Authorization") === `Bearer ${sbKey}`) h.delete("Authorization");
+          h.set("apikey", sbKey);
+          return fetch(input, { ...init, headers: h });
+        },
+      },
     });
     const now = new Date().toISOString();
     const { data: promos, error } = await sb
