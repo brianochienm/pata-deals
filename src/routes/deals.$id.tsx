@@ -91,9 +91,7 @@ function DealPage() {
     <div className="mx-auto max-w-5xl px-4 py-5 pb-28">
       <div className="grid gap-5 md:grid-cols-[1.2fr_1fr]">
         <div>
-          <div className="aspect-[16/10] overflow-hidden rounded-2xl bg-surface">
-            {img && <img src={img} alt={p.title} className="size-full object-cover" />}
-          </div>
+          <Gallery title={p.title} images={[img, ...(((p as any).gallery_urls ?? []) as string[])].filter(Boolean) as string[]} />
           <div className="glass mt-3 flex items-center gap-3 p-3">
             <Logo name={p.businesses?.name ?? ""} url={p.businesses?.logo_url} />
             <div className="min-w-0">
