@@ -105,7 +105,7 @@ export function SiteFooter() {
               <span className="block text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
                 Email us
               </span>
-              <span className="block break-all text-sm font-semibold text-foreground">{SUPPORT_EMAIL}</span>
+              <span className="block break-all text-[13px] font-semibold text-foreground sm:text-sm">{SUPPORT_EMAIL}</span>
             </span>
           </a>
           <a
