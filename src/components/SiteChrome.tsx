@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { Home, Search, Heart, User, Store, Shield, LogOut } from "lucide-react";
+import { Home, Search, Heart, User, Store, Shield, LogOut, Mail, Phone } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth, useRoles } from "@/hooks/use-auth";
@@ -83,19 +83,50 @@ export function BottomNav() {
 
 export const SUPPORT_EMAIL = "brianochiengodhiambo18@gmail.com";
 export const SUPPORT_PHONE = "+254 114 917 724";
+export const SUPPORT_PHONE_TEL = "+254114917724";
 
 export function SiteFooter() {
   return (
-    <footer className="mx-auto max-w-6xl px-4 pb-24 pt-8 text-center text-xs text-muted-foreground md:pb-10">
-      <p>
+    <footer className="mx-auto max-w-6xl px-4 pb-24 pt-8 md:pb-10">
+      <div className="glass p-5">
+        <p className="text-center text-sm font-semibold text-foreground">Support &amp; enquiries</p>
+        <p className="mx-auto mt-1 max-w-[44ch] text-center text-xs text-muted-foreground">
+          Talk to the Pata team directly — every message gets a reply.
+        </p>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          <a
+            href={`mailto:${SUPPORT_EMAIL}`}
+            className="tile flex items-center gap-3 p-3 text-left transition-colors hover:bg-glass"
+          >
+            <span className="grid size-9 shrink-0 place-items-center rounded-[10px] pill-cyan">
+              <Mail className="size-4" />
+            </span>
+            <span className="min-w-0">
+              <span className="block text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+                Email us
+              </span>
+              <span className="block break-all text-sm font-semibold text-foreground">{SUPPORT_EMAIL}</span>
+            </span>
+          </a>
+          <a
+            href={`tel:${SUPPORT_PHONE_TEL}`}
+            className="tile flex items-center gap-3 p-3 text-left transition-colors hover:bg-glass"
+          >
+            <span className="grid size-9 shrink-0 place-items-center rounded-[10px] pill-gold">
+              <Phone className="size-4" />
+            </span>
+            <span className="min-w-0">
+              <span className="block text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+                Call us
+              </span>
+              <span className="block text-sm font-semibold text-foreground">{SUPPORT_PHONE}</span>
+            </span>
+          </a>
+        </div>
+      </div>
+      <p className="mt-4 text-center text-xs text-muted-foreground">
         © {new Date().getFullYear()} {BRAND} · Nairobi, Kenya ·{" "}
         <Link to="/for-business" className="text-primary">List Your Promotion — Free</Link>
-      </p>
-      <p className="mt-2">
-        Support &amp; inquiries:{" "}
-        <a href={`mailto:${SUPPORT_EMAIL}`} className="text-primary">{SUPPORT_EMAIL}</a>
-        {" · "}
-        <a href={`tel:${SUPPORT_PHONE.replace(/\s/g, "")}`} className="text-primary">{SUPPORT_PHONE}</a>
       </p>
     </footer>
   );
