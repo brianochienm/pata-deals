@@ -1,0 +1,1 @@
+ALTER TABLE public.promotions ADD COLUMN IF NOT EXISTS gallery_urls text[] NOT NULL DEFAULT '{}';
