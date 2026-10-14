@@ -329,6 +329,7 @@ export type Database = {
           description: string | null
           discount_pct: number | null
           ends_at: string
+          gallery_urls: string[]
           id: string
           image_url: string | null
           instructions: string | null
@@ -354,6 +355,7 @@ export type Database = {
           description?: string | null
           discount_pct?: number | null
           ends_at: string
+          gallery_urls?: string[]
           id?: string
           image_url?: string | null
           instructions?: string | null
@@ -379,6 +381,7 @@ export type Database = {
           description?: string | null
           discount_pct?: number | null
           ends_at?: string
+          gallery_urls?: string[]
           id?: string
           image_url?: string | null
           instructions?: string | null

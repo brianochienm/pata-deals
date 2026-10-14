@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ImageDrop, type ImgItem } from "@/components/ImageDrop";
 
 export const Route = createFileRoute("/_authenticated/business")({
   head: () => ({ meta: [{ title: "Business dashboard — Pata" }, { name: "description", content: "Manage your promotions, verify codes and track commissions." }] }),
@@ -50,7 +51,7 @@ function BusinessPage() {
         </TabsList>
         <TabsContent value="verify"><Verify /></TabsContent>
         <TabsContent value="overview"><Overview businessId={biz.id} /></TabsContent>
-        <TabsContent value="promos"><MyPromos businessId={biz.id} /></TabsContent>
+        <TabsContent value="promos"><MyPromos business={biz} /></TabsContent>
         <TabsContent value="new"><PromoForm business={biz} /></TabsContent>
       </Tabs>
     </div>
@@ -78,7 +79,8 @@ function Onboarding() {
   const { data: cats } = useQuery(categoriesQuery);
   const { data: locs } = useQuery(locationsQuery);
   const [f, setF] = useState<any>({ email: user?.email ?? "" });
-  const [logo, setLogo] = useState<File | null>(null);
+  const [logoItems, setLogoItems] = useState<ImgItem[]>([]);
+  const logo = logoItems[0]?.file ?? null;
   const [busy, setBusy] = useState(false);
   const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => setF({ ...f, [k]: e.target.value });
   const field = (k: string, ph: string) => <Input placeholder={ph} value={f[k] ?? ""} onChange={set(k)} />;
@@ -124,7 +126,7 @@ function Onboarding() {
         <div className="grid grid-cols-2 gap-2">{field("website", "Website")}{field("instagram", "Instagram / TikTok")}</div>
         {field("payout_details", "Payment info for settlement (e.g. M-Pesa till)")}
         {field("verification_info", "Verification (KRA PIN / business reg. no.)")}
-        <label className="text-sm text-muted-foreground">Logo <input type="file" accept="image/*" className="mt-1 block text-sm" onChange={(e) => setLogo(e.target.files?.[0] ?? null)} /></label>
+        <ImageDrop label="Business logo" items={logoItems} onChange={setLogoItems} />
         <Button type="submit" disabled={busy} className="mt-2">{busy ? "Submitting…" : "Submit for review"}</Button>
       </form>
     </div>
@@ -240,11 +242,20 @@ function Overview({ businessId }: { businessId: string }) {
   );
 }
 
-function MyPromos({ businessId }: { businessId: string }) {
+function MyPromos({ business }: { business: any }) {
+  const businessId = business.id;
+  const [editing, setEditing] = useState<any>(null);
   const { data } = useQuery({
     queryKey: ["biz-promo-list", businessId],
     queryFn: async () => (await supabase.from("promotions").select("*").eq("business_id", businessId).order("created_at", { ascending: false })).data ?? [],
   });
+  if (editing)
+    return (
+      <div className="mt-3">
+        <Button variant="ghost" size="sm" onClick={() => setEditing(null)}>← Back to promotions</Button>
+        <PromoForm business={business} existing={editing} onDone={() => setEditing(null)} />
+      </div>
+    );
   return (
     <div className="mt-3 grid gap-2">
       {data?.map((p) => (
@@ -253,7 +264,10 @@ function MyPromos({ businessId }: { businessId: string }) {
             <Link to="/deals/$id" params={{ id: p.id }} className="truncate font-medium">{p.title}</Link>
             <p className="text-xs text-muted-foreground">{ksh(p.promo_price)} · {p.view_count} views · ends {new Date(p.ends_at).toLocaleDateString("en-KE")}</p>
           </div>
-          <span className={`shrink-0 rounded-full px-2 py-1 text-xs capitalize ${p.status === "approved" ? "pill-cyan" : p.status === "pending" ? "pill-gold" : "pill-coral"}`}>{p.is_flagged ? "flagged" : p.status}</span>
+          <div className="flex shrink-0 items-center gap-2">
+            <span className={`rounded-full px-2 py-1 text-xs capitalize ${p.status === "approved" ? "pill-cyan" : p.status === "pending" ? "pill-gold" : "pill-coral"}`}>{p.is_flagged ? "flagged" : p.status}</span>
+            <Button size="sm" variant="secondary" onClick={() => setEditing(p)}>Edit</Button>
+          </div>
         </div>
       ))}
       {!data?.length && <p className="text-sm text-muted-foreground">No promotions yet — create your first one.</p>}
@@ -277,13 +291,19 @@ const promoSchema = z.object({
   tags: z.string().max(200),
 });
 
-function PromoForm({ business }: { business: any }) {
+function PromoForm({ business, existing, onDone }: { business: any; existing?: any; onDone?: () => void }) {
   const { user } = useAuth();
   const qc = useQueryClient();
   const { data: locs } = useQuery(locationsQuery);
   const today = new Date().toISOString().slice(0, 10);
-  const [f, setF] = useState<any>({ redemption_method: "qr", starts_at: today, location_id: business.location_id ?? "" });
-  const [img, setImg] = useState<File | null>(null);
+  const [f, setF] = useState<any>(existing ? {
+    ...existing,
+    starts_at: existing.starts_at.slice(0, 10), ends_at: existing.ends_at.slice(0, 10),
+    max_redemptions: existing.max_redemptions?.toString() ?? "", tags: (existing.tags ?? []).join(", "),
+    description: existing.description ?? "", online_url: existing.online_url ?? "", terms: existing.terms ?? "", instructions: existing.instructions ?? "",
+    location_id: existing.location_id ?? "",
+  } : { redemption_method: "qr", starts_at: today, location_id: business.location_id ?? "" });
+  const [imgs, setImgs] = useState<ImgItem[]>(existing ? [existing.image_url, ...(existing.gallery_urls ?? [])].filter(Boolean).map((url: string) => ({ url })) : []);
   const [busy, setBusy] = useState(false);
   const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => setF({ ...f, [k]: e.target.value });
   const op = Number(f.original_price || 0), pp = Number(f.promo_price || 0);
@@ -297,22 +317,26 @@ function PromoForm({ business }: { business: any }) {
     if (d.promo_price > d.original_price) { toast.error("Promotional price must be below the original price"); return; }
     setBusy(true);
     try {
-      const image_url = img ? await uploadImage(user!.id, img) : null;
-      const { error } = await supabase.from("promotions").insert({
-        business_id: business.id, category_id: business.category_id, location_id: d.location_id,
-        title: d.title, description: d.description || null, image_url,
+      const urls: string[] = [];
+      for (const it of imgs) urls.push(it.file ? await uploadImage(user!.id, it.file) : it.url!);
+      const row = {
+        location_id: d.location_id,
+        title: d.title, description: d.description || null, image_url: urls[0] ?? null, gallery_urls: urls.slice(1),
         original_price: d.original_price, promo_price: d.promo_price,
         starts_at: new Date(d.starts_at).toISOString(), ends_at: new Date(d.ends_at + "T23:59:59").toISOString(),
         max_redemptions: d.max_redemptions ? Math.max(1, parseInt(d.max_redemptions)) : null,
         redemption_method: d.redemption_method, online_url: d.online_url || null,
         terms: d.terms || null, instructions: d.instructions || null,
         tags: d.tags.split(",").map((t) => t.trim().toLowerCase()).filter(Boolean).slice(0, 10),
-      });
+      };
+      const { error } = existing
+        ? await supabase.from("promotions").update(row).eq("id", existing.id)
+        : await supabase.from("promotions").insert({ ...row, business_id: business.id, category_id: business.category_id });
       if (error) throw error;
-      toast.success("Promotion submitted for approval");
-      setF({ redemption_method: "qr", starts_at: today, location_id: business.location_id ?? "" });
-      setImg(null);
+      toast.success(existing ? "Promotion updated. Changes to title or price go back for a quick review." : "Promotion submitted for approval");
+      if (!existing) { setF({ redemption_method: "qr", starts_at: today, location_id: business.location_id ?? "" }); setImgs([]); }
       qc.invalidateQueries({ queryKey: ["biz-promo-list"] });
+      onDone?.();
     } catch (err: any) { toast.error(err.message); }
     setBusy(false);
   };
@@ -342,8 +366,8 @@ function PromoForm({ business }: { business: any }) {
       <Textarea placeholder="Redemption instructions" value={f.instructions ?? ""} onChange={set("instructions")} maxLength={1000} />
       <Textarea placeholder="Terms & conditions" value={f.terms ?? ""} onChange={set("terms")} maxLength={2000} />
       {inp("tags", "Search tags, comma separated (e.g. lunch, date night)")}
-      <label className="text-sm text-muted-foreground">Promotional image <input type="file" accept="image/*" className="mt-1 block text-sm" onChange={(e) => setImg(e.target.files?.[0] ?? null)} /></label>
-      <Button type="submit" disabled={busy} className="mt-2">{busy ? "Submitting…" : "Submit for approval"}</Button>
+      <ImageDrop label="Promotion photos" items={imgs} onChange={setImgs} max={8} />
+      <Button type="submit" disabled={busy} className="mt-2">{busy ? "Saving…" : existing ? "Save changes" : "Submit for approval"}</Button>
     </form>
   );
 }

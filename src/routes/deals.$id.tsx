@@ -91,9 +91,7 @@ function DealPage() {
     <div className="mx-auto max-w-5xl px-4 py-5 pb-28">
       <div className="grid gap-5 md:grid-cols-[1.2fr_1fr]">
         <div>
-          <div className="aspect-[16/10] overflow-hidden rounded-2xl bg-surface">
-            {img && <img src={img} alt={p.title} className="size-full object-cover" />}
-          </div>
+          <Gallery title={p.title} images={[img, ...(((p as any).gallery_urls ?? []) as string[])].filter(Boolean) as string[]} />
           <div className="glass mt-3 flex items-center gap-3 p-3">
             <Logo name={p.businesses?.name ?? ""} url={p.businesses?.logo_url} />
             <div className="min-w-0">
@@ -220,4 +218,25 @@ function ReportButton({ promotionId }: { promotionId: string }) {
     else toast.success("Report sent to our team");
   };
   return <button onClick={report} className="mt-4 flex items-center gap-1 text-xs text-muted-foreground hover:text-coral"><Flag className="size-3" />Report this offer</button>;
+}
+
+function Gallery({ images, title }: { images: string[]; title: string }) {
+  const [i, setI] = useState(0);
+  const cur = images[i] ?? images[0];
+  return (
+    <div>
+      <div className="aspect-[16/10] overflow-hidden rounded-2xl bg-surface">
+        {cur && <img src={cur} alt={title} className="size-full object-cover" />}
+      </div>
+      {images.length > 1 && (
+        <div className="mt-2 flex gap-2 overflow-x-auto">
+          {images.map((u, k) => (
+            <button key={u + k} type="button" onClick={() => setI(k)} aria-label={`Photo ${k + 1}`} className={`size-16 shrink-0 overflow-hidden rounded-lg border-2 ${k === i ? "border-primary" : "border-transparent opacity-70"}`}>
+              <img src={u} alt="" className="size-full object-cover" />
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
 }
