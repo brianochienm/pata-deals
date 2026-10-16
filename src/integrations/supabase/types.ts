@@ -283,16 +283,19 @@ export type Database = {
         Row: {
           default_commission_rate: number
           id: number
+          unlock_fee_enabled: boolean
           updated_at: string
         }
         Insert: {
           default_commission_rate?: number
           id?: number
+          unlock_fee_enabled?: boolean
           updated_at?: string
         }
         Update: {
           default_commission_rate?: number
           id?: number
+          unlock_fee_enabled?: boolean
           updated_at?: string
         }
         Relationships: []
@@ -437,10 +440,14 @@ export type Database = {
           created_at: string
           id: string
           method: Database["public"]["Enums"]["redemption_method"]
+          mpesa_receipt: string | null
           promotion_id: string
           redeemed_at: string | null
           status: Database["public"]["Enums"]["redemption_status"]
           transaction_value: number | null
+          unlock_fee: number | null
+          unlock_paid: boolean
+          unlock_paid_at: string | null
           user_id: string
         }
         Insert: {
@@ -455,10 +462,14 @@ export type Database = {
           created_at?: string
           id?: string
           method: Database["public"]["Enums"]["redemption_method"]
+          mpesa_receipt?: string | null
           promotion_id: string
           redeemed_at?: string | null
           status?: Database["public"]["Enums"]["redemption_status"]
           transaction_value?: number | null
+          unlock_fee?: number | null
+          unlock_paid?: boolean
+          unlock_paid_at?: string | null
           user_id: string
         }
         Update: {
@@ -473,10 +484,14 @@ export type Database = {
           created_at?: string
           id?: string
           method?: Database["public"]["Enums"]["redemption_method"]
+          mpesa_receipt?: string | null
           promotion_id?: string
           redeemed_at?: string | null
           status?: Database["public"]["Enums"]["redemption_status"]
           transaction_value?: number | null
+          unlock_fee?: number | null
+          unlock_paid?: boolean
+          unlock_paid_at?: string | null
           user_id?: string
         }
         Relationships: [
@@ -570,6 +585,7 @@ export type Database = {
       admin_exists: { Args: never; Returns: boolean }
       admin_user_count: { Args: never; Returns: number }
       claim_first_admin: { Args: never; Returns: boolean }
+      commission_rate_for: { Args: { _business_id: string }; Returns: number }
       confirm_redemption: {
         Args: { _code: string; _transaction_value: number }
         Returns: {
@@ -584,10 +600,14 @@ export type Database = {
           created_at: string
           id: string
           method: Database["public"]["Enums"]["redemption_method"]
+          mpesa_receipt: string | null
           promotion_id: string
           redeemed_at: string | null
           status: Database["public"]["Enums"]["redemption_status"]
           transaction_value: number | null
+          unlock_fee: number | null
+          unlock_paid: boolean
+          unlock_paid_at: string | null
           user_id: string
         }
         SetofOptions: {
@@ -635,10 +655,14 @@ export type Database = {
           created_at: string
           id: string
           method: Database["public"]["Enums"]["redemption_method"]
+          mpesa_receipt: string | null
           promotion_id: string
           redeemed_at: string | null
           status: Database["public"]["Enums"]["redemption_status"]
           transaction_value: number | null
+          unlock_fee: number | null
+          unlock_paid: boolean
+          unlock_paid_at: string | null
           user_id: string
         }
         SetofOptions: {
@@ -692,6 +716,14 @@ export type Database = {
           isOneToOne: true
           isSetofReturn: false
         }
+      }
+      unlock_fee_for: {
+        Args: { _promotion_id: string }
+        Returns: {
+          fee: number
+          rate: number
+          required: boolean
+        }[]
       }
     }
     Enums: {

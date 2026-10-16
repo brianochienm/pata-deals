@@ -29,6 +29,13 @@
       "when": 1791960007652,
       "tag": "0003_promo_gallery",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1792178935536,
+      "tag": "0004_unlock_fee",
+      "breakpoints": true
     }
   ]
 }
