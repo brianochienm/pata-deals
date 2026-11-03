@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Globe, MapPin, Phone } from "lucide-react";
@@ -36,7 +37,7 @@ function ShopPage() {
       return (data ?? []) as unknown as Promo[];
     },
   });
-  const [cat, setCat] = useStateCat();
+  const [cat, setCat] = useState<string | null>(null);
 
   if (isLoading) return <div className="mx-auto max-w-5xl p-4"><Skeleton className="h-40 rounded-2xl" /></div>;
   if (!biz) return <div className="p-8 text-center"><p className="font-semibold">Shop not found</p><Link to="/deals" className="text-primary">Browse deals</Link></div>;
@@ -77,6 +78,3 @@ function ShopPage() {
     </div>
   );
 }
-
-import { useState } from "react";
-function useStateCat() { return useState<string | null>(null); }
