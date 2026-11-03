@@ -87,47 +87,22 @@ export const SUPPORT_PHONE_TEL = "+254114917724";
 
 export function SiteFooter() {
   return (
-    <footer className="mx-auto max-w-6xl px-4 pb-24 pt-8 md:pb-10">
-      <div className="glass p-5">
-        <p className="text-center text-sm font-semibold text-foreground">Support &amp; enquiries</p>
-        <p className="mx-auto mt-1 max-w-[44ch] text-center text-xs text-muted-foreground">
-          Talk to the Pata team directly — every message gets a reply.
-        </p>
-        <div className="mt-4 grid gap-3 sm:grid-cols-2">
-          <a
-            href={`mailto:${SUPPORT_EMAIL}`}
-            className="tile flex items-center gap-3 p-3 text-left transition-colors hover:bg-glass"
-          >
-            <span className="grid size-9 shrink-0 place-items-center rounded-[10px] pill-cyan">
-              <Mail className="size-4" />
-            </span>
-            <span className="min-w-0">
-              <span className="block text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
-                Email us
-              </span>
-              <span className="block break-all text-[13px] font-semibold text-foreground sm:text-sm">{SUPPORT_EMAIL}</span>
-            </span>
+    <footer className="mt-10 border-t border-border/50">
+      <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 pb-24 pt-6 text-xs text-muted-foreground md:flex-row md:items-center md:justify-between md:pb-8">
+        <div className="flex flex-col gap-1.5 sm:flex-row sm:flex-wrap sm:gap-x-5">
+          <span className="font-semibold text-foreground">Support &amp; enquiries</span>
+          <a href={`mailto:${SUPPORT_EMAIL}`} className="flex items-center gap-1.5 hover:text-foreground">
+            <Mail className="size-3.5 shrink-0" /> Email: <span className="break-all text-foreground">{SUPPORT_EMAIL}</span>
           </a>
-          <a
-            href={`tel:${SUPPORT_PHONE_TEL}`}
-            className="tile flex items-center gap-3 p-3 text-left transition-colors hover:bg-glass"
-          >
-            <span className="grid size-9 shrink-0 place-items-center rounded-[10px] pill-gold">
-              <Phone className="size-4" />
-            </span>
-            <span className="min-w-0">
-              <span className="block text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
-                Call us
-              </span>
-              <span className="block text-sm font-semibold text-foreground">{SUPPORT_PHONE}</span>
-            </span>
+          <a href={`tel:${SUPPORT_PHONE_TEL}`} className="flex items-center gap-1.5 hover:text-foreground">
+            <Phone className="size-3.5 shrink-0" /> Tel: <span className="text-foreground">{SUPPORT_PHONE}</span>
           </a>
         </div>
+        <p>
+          © {new Date().getFullYear()} {BRAND} · Nairobi ·{" "}
+          <Link to="/for-business" className="text-primary">List your promotion — free</Link>
+        </p>
       </div>
-      <p className="mt-4 text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} {BRAND} · Nairobi, Kenya ·{" "}
-        <Link to="/for-business" className="text-primary">List Your Promotion — Free</Link>
-      </p>
     </footer>
   );
 }

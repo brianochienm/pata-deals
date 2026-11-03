@@ -290,6 +290,16 @@ function Settings() {
         <p className="text-xs text-muted-foreground">Used unless a business or category has its own rate. Priority: business → category → default.</p>
         {s && <div className="mt-2 flex gap-2"><Input type="number" step="0.5" defaultValue={s.default_commission_rate} id="defrate" className="w-28" /><Button onClick={() => saveDefault((document.getElementById("defrate") as HTMLInputElement).value)}>Save</Button></div>}
       </div>
+      {s && (
+        <div className="glass p-4">
+          <p className="text-sm font-semibold">Require unlock fee</p>
+          <p className="text-xs text-muted-foreground">When on, customers pay the commission as an unlock fee via M-Pesa before the shop can accept their voucher. Turn on once M-Pesa is connected.</p>
+          <Button className="mt-2" variant={(s as any).unlock_fee_enabled ? "default" : "secondary"} onClick={async () => {
+            const { error } = await supabase.from("platform_settings").update({ unlock_fee_enabled: !(s as any).unlock_fee_enabled } as any).eq("id", 1);
+            if (error) toast.error(error.message); else { toast.success("Saved"); qc.invalidateQueries({ queryKey: ["settings"] }); }
+          }}>{(s as any).unlock_fee_enabled ? "On — tap to turn off" : "Off — tap to turn on"}</Button>
+        </div>
+      )}
       <div className="glass p-4">
         <p className="text-sm font-semibold">Categories & category rates</p>
         <div className="mt-2 grid gap-2">

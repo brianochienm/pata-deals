@@ -1,0 +1,4 @@
+- [x] Unlock fee (= shop commission) structure, admin on/off switch
+- [ ] M-Pesa STK push for unlock fee — waiting on till approval
+- [x] Smaller support footer
+- [x] Shop page with all deals

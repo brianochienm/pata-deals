@@ -59,6 +59,11 @@ function DealPage() {
       (await supabase.from("redemptions").select("id,status").eq("promotion_id", id).eq("user_id", user!.id).not("status", "in", "(cancelled,reversed)").maybeSingle()).data,
   });
 
+  const { data: fee } = useQuery({
+    queryKey: ["unlock-fee", id],
+    queryFn: async () => ((await supabase.rpc("unlock_fee_for", { _promotion_id: id })).data as any)?.[0] ?? null,
+  });
+
   useEffect(() => {
     supabase.rpc("increment_view", { _promotion_id: id });
   }, [id]);
@@ -95,7 +100,7 @@ function DealPage() {
           <div className="glass mt-3 flex items-center gap-3 p-3">
             <Logo name={p.businesses?.name ?? ""} url={p.businesses?.logo_url} />
             <div className="min-w-0">
-              <p className="truncate text-sm font-semibold">{p.businesses?.name}</p>
+              <Link to="/shops/$id" params={{ id: p.business_id }} className="block truncate text-sm font-semibold hover:text-primary">{p.businesses?.name}</Link>
               <p className="text-xs text-muted-foreground">{p.categories?.icon} {p.categories?.name}{avg ? ` · ★ ${avg.toFixed(1)} (${reviews!.length})` : ""}</p>
             </div>
             <FollowButton businessId={p.business_id} name={p.businesses?.name} />
@@ -122,6 +127,9 @@ function DealPage() {
             <div className="glass p-3"><Ticket className="mb-1 size-4 text-gold" />{methodLabel[p.redemption_method]}</div>
             <div className="glass p-3"><Tag className="mb-1 size-4 text-primary" />{left != null ? `${left} of ${p.max_redemptions} left` : `${used ?? 0} claimed`}</div>
           </div>
+
+          {fee && <UnlockBreakdown fee={Number(fee.fee)} price={p.promo_price} />}
+          <Link to="/shops/$id" params={{ id: p.business_id }} className="mt-2 inline-block text-sm text-primary">See all deals from {p.businesses?.name} →</Link>
 
           <div className="mt-4 hidden md:block">
             <RedeemCTA mine={mine} expired={expired} soldOut={left === 0} busy={busy} onRedeem={redeem} />
@@ -174,6 +182,17 @@ function RedeemCTA({ mine, expired, soldOut, busy, onRedeem }: { mine: any; expi
     <Button size="lg" className="w-full" disabled={busy || expired || soldOut} onClick={onRedeem}>
       {expired ? "Offer expired" : soldOut ? "Fully claimed" : busy ? "Generating code…" : "Redeem This Offer"}
     </Button>
+  );
+}
+
+function UnlockBreakdown({ fee, price }: { fee: number; price: number }) {
+  return (
+    <div className="glass mt-4 p-3 text-sm">
+      <p className="font-semibold">How you pay</p>
+      <div className="mt-2 flex justify-between"><span className="text-muted-foreground">1. Unlock fee to Pata (M-Pesa)</span><span className="font-semibold text-primary">{ksh(fee)}</span></div>
+      <div className="mt-1 flex justify-between"><span className="text-muted-foreground">2. Balance at the shop</span><span className="font-semibold">{ksh(Math.max(0, price - fee))}</span></div>
+      <p className="mt-2 text-xs text-muted-foreground">The shop deducts your unlock fee from the bill, so you never pay more than {ksh(price)}.</p>
+    </div>
   );
 }
 
